@@ -58,7 +58,6 @@ public class Game : MonoBehaviour
         gridCell = oneIter.GetGridCell();
 
         clickCell = new ClickCellHandler(gridCell);
-        //graphics = new Graphics(gridObj, gridCell);
         graphics.InitialSetup(gridObj, gridCell);
 
         graphics.SetRandomizeButtonCallback(OnRandomizeButtonClicked);
@@ -78,16 +77,9 @@ public class Game : MonoBehaviour
             ToggleSimulationPause();
         }
 
-        try
+        if (simulationPaused)
         {
-            if (simulationPaused)
-            {
-                clickCell.Process();
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"game.Update clickCell.Process() {e.Message} ");
+            clickCell.Process();
         }
 
         graphics.UpdateStates();
@@ -108,15 +100,8 @@ public class Game : MonoBehaviour
             }
         }
 
-        bool keyDown = false;
-        try
-        {
-            keyDown = Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"game.Update() getKeyDown: {e.Message}");
-        }
+        
+        bool keyDown = Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter);
         if (keyDown)
         {
             oneIter.Process();
@@ -128,13 +113,8 @@ public class Game : MonoBehaviour
         simulationPaused = !simulationPaused;
         SimulationPaused?.Invoke(simulationPaused);
 
-        if (graphics != null)
-        {
-            graphics.UpdatePauseVisualization(simulationPaused);
-            graphics.UpdateRandomizeButtonState(simulationPaused);
-        }
-
-        Debug.Log($"Simulation {(simulationPaused ? "PAUSED" : "RESUMED")}");
+        graphics.UpdatePauseVisualization(simulationPaused);
+        graphics.UpdateRandomizeButtonState(simulationPaused);
     }
 
     public void SetSimulationPause(bool paused)
@@ -143,13 +123,7 @@ public class Game : MonoBehaviour
         {
             simulationPaused = paused;
             SimulationPaused?.Invoke(simulationPaused);
-
-            if (graphics != null)
-            {
-                graphics.UpdatePauseVisualization(simulationPaused);
-            }
-
-            Debug.Log($"Simulation {(simulationPaused ? "PAUSED" : "RESUMED")}");
+            graphics.UpdatePauseVisualization(simulationPaused);
         }
     }
 
@@ -169,7 +143,7 @@ public class Game : MonoBehaviour
 
     void OnRandomizeButtonClicked()
     {
-        if (simulationPaused && gridGen != null)
+        if (simulationPaused)
         {
             gridGen.GenerateRandomStates(gridCell);
             graphics.UpdateStates();
@@ -178,12 +152,9 @@ public class Game : MonoBehaviour
 
     void OnSpeedChanged()
     {
-        if (graphics != null)
-        {
-            float newSpeed = graphics.GetSpeedValue();
-            iterationInterval = 1.0f / newSpeed;
-            graphics.UpdateSpeedText(newSpeed); 
-            Debug.Log($"Speed changed to: {newSpeed:F1}x");
-        }
+        float newSpeed = graphics.GetSpeedValue();
+        iterationInterval = 1.0f / newSpeed;
+        graphics.UpdateSpeedText(newSpeed); 
+        Debug.Log($"Speed changed to: {newSpeed:F1}x");
     }
 }

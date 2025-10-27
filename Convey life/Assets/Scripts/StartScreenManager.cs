@@ -13,12 +13,7 @@ public class StartScreenManager : MonoBehaviour
     void Start()
     {
         game = FindObjectOfType<Game>();
-
-        if (game != null)
-        {
-            game.GameStartRequested += TransitionToGame;
-        }
-
+        game.GameStartRequested += TransitionToGame;
         startButton.onClick.AddListener(ButtonClick);
     }
 
@@ -28,14 +23,11 @@ public class StartScreenManager : MonoBehaviour
         cameraSetup.Setup(0, 0, 6f);
         cameraSetup.UnenableZoom();
 
-        //startScreen.transform.localScale = new Vector3(scaleX, scaleY, 1);
-
         TextMeshProUGUI gameNameText = GameObject.Find("GameName").GetComponent<TextMeshProUGUI>();
 
         startScreen.transform.position = new Vector3(0, 0, 0);
         RectTransform textRect = gameNameText.GetComponent<RectTransform>();
         textRect.localPosition = new Vector3(-0.44f, 1.46f, 0);
-        //SetupButtonPosition();
     }
 
     void SetupButtonPosition()
@@ -50,10 +42,7 @@ public class StartScreenManager : MonoBehaviour
     void ButtonClick()
     {
         startButton.interactable = false;
-        if (game != null)
-        {
-            game.RequestGameStart();
-        }
+        game.RequestGameStart();
     }
 
     void TransitionToGame()
@@ -69,9 +58,6 @@ public class StartScreenManager : MonoBehaviour
 
     void OnDestroy()
     {
-        if (game != null)
-        {
-            game.GameStartRequested -= TransitionToGame;
-        }
+        game.GameStartRequested -= TransitionToGame;
     }
 }

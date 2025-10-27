@@ -22,7 +22,6 @@ public class CameraSetup : MonoBehaviour
         dragCamera.dragEnabled = true;
         dragCamera.minZoom = 2f;
         dragCamera.maxZoom = scale * 1.1f / 2f;
-        //dragCamera.dragSpeed = 5f;
     }
 
     public void UnenableZoom()
@@ -31,14 +30,4 @@ public class CameraSetup : MonoBehaviour
         dragCamera.zoomEnabled = false;
         dragCamera.dragEnabled = false;
     }
-
-    //public void Update()
-    //{
-    //    float scroll = Input.GetAxis("Mouse ScrollWheel");
-    //    if (gameStarted && scroll != 0)
-    //    {
-    //        Camera.main.orthographicSize -= scroll * zoomSpeed;
-    //        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minZoom, maxZoom);
-    //    }
-    //}
 }
